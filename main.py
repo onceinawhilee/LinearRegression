@@ -1,42 +1,27 @@
-import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('data.csv')
 
-print(data)
-
-plt.scatter(data.studytime, data.score)
-
-def gradient_descent(m_now, b_now, points, L):
-    m_gradient = 0
-    b_gradient = 0
-
-    n = len(points)
-
-    for i in range(n):
-        x = points.iloc[i].studytime
-        y = points.iloc[i].score
-
-        m_gradient += -(2 / n) * x * (y - (m_now * x + b_now))
-        b_gradient += -(2 / n) * (y - (m_now * x + b_now))
-    m = m_now - m_gradient * L
-    b = b_now - b_gradient * L
-    print(m_gradient)
-    print(m)
-
-    return m, b
+def y_function(functionnn):
+    return functionnn ** 2
 
 
-m = 0
-b = 0
-L = 0.0001
-epochs = 100
+def y_derivative(functionnnnnn):
+    return 2 * functionnnnnn
 
-for i in range(epochs):
-    m, b = gradient_descent(m, b, data, L)
 
-print(m, b)
+x = np.arange(-100, 100, 0.1)
+y = y_function(x)
 
-plt.scatter(data.studytime, data.score, color="black")
-plt.plot(list(range(0, 60)), [m * x + b for x in range(0, 60)], color="red")
-plt.show()
+current_pos = (50, y_function(50))
+
+learning_rate = 0.01
+
+for _ in range(1000):
+    new_x = current_pos[0] - learning_rate * y_derivative(current_pos[0])
+    new_y = y_function(new_x)
+    current_pos = (new_x, new_y)
+    plt.plot(x, y)
+    plt.scatter(current_pos[0], current_pos[1], color="red")
+    plt.pause(0.001)
+    plt.clf()
